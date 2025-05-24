@@ -1,6 +1,6 @@
 services:
   spring-jni:
-    image: 'goValen1023/codigo-cesar:latest'
+    image: 'govalen1023/codigo-cesar:latest'
     ports:
       - '8083:8080'
     networks:
