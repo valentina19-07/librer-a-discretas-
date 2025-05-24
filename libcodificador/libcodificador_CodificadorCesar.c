@@ -45,12 +45,22 @@ JNIEXPORT jstring JNICALL Java_libcodificador_CodificadorCesar_decodificar
       int strLen = (*env)->GetStringLength(env, mensaje);
       mensajeDecodificado = calloc(strLen, sizeof(char));
       for(int i = 0; i < strLen; i++){
-         /*
-         se resta 32 y luego del cifrado se suman de nuevo para que el valor quede entre 32 a 126
-         que son los caracteres imprimibles en codigo ascii
-         https://elcodigoascii.com.ar
-         */
-         mensajeCodificado[i] = (str[i] - 32 - (int)clave) % 95 + 32;
+	/*
+        se resta 32 y luego del cifrado se suman de nuevo para que el valor quede entre 32 a 126
+        que son los caracteres imprimibles en codigo ascii
+        https://elcodigoascii.com.ar
+        */
+        int caracter = str[i] - 32 - clave;
+        if(caracter >= 0) {
+          mensajeDecodificado[i] = (caracter) % 95 + 32;
+        }else{
+          //modulo de un negativo
+          int aux = caracter/95;
+          if (caracter/95 != (float) caracter/95)
+            aux--;
+          aux *= 95;
+          mensajeDecodificado[i] = caracter - aux + 32;
+        }
       }
       responece = (*env)->NewStringUTF(env, mensajeDecodificado);
       free(mensajeDecodificado);
